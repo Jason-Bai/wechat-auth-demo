@@ -10,7 +10,8 @@ async function fetchToken(code) {
   const url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${secret}&code=${code}&grant_type=authorization_code`
   let token
   try {
-    token = await U.axios.get(url)
+    const { data = null } = await U.axios.get(url)
+    token = data
   } catch (err) {
     token = null
   }
@@ -24,7 +25,8 @@ async function fetchUser(accessToken, openId) {
   const url = `https://api.weixin.qq.com/sns/userinfo?access_token=${accessToken}&openid=${openId}`
   let user
   try {
-    user = await U.axios.get(url)
+    const { data = null } = await U.axios.get(url)
+    user= data
   } catch (err) {
     user = null
   }
