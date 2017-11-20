@@ -5,7 +5,7 @@ const Router = express.Router()
 
 Router.get('/', async (req, res, next) => {
   const { code } = req.query
-  const user = await AuthCtl.user(cod)
+  const user = await AuthCtl.user(code)
   res.send(user)
 })
 

@@ -8,7 +8,13 @@ async function fetchToken(code) {
   const { oauth } = configs
   const { appid, secret } = oauth
   const url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${secret}&code=${code}&grant_type=authorization_code`
-  return U.axios.get(url)
+  let token
+  try {
+    token = await U.axios.get(url)
+  } catch (err) {
+    token = null
+  }
+  return token
 }
 
 /**
@@ -16,21 +22,49 @@ async function fetchToken(code) {
  */
 async function fetchUser(accessToken, openId) {
   const url = `https://api.weixin.qq.com/sns/userinfo?access_token=${accessToken}&openid=${openId}`
-  return U.axios.get(url)
+  let user
+  try {
+    user = await U.axios.get(url)
+  } catch (err) {
+    user = null
+  }
+  return user
 }
 
 /**
  * 获取用户主流程
  */
 async function user(code) {
-  let user
+  let error
+  let accessToken
   try {
-    const accessToken = await fetchToken(code)
-    const { access_token, openid } = accessToken
+    accessToken = await fetchToken(code)
+  } catch (err) {
+    error = err
+  }
+
+  if (error) {
+    return [error]
+  }
+
+  console.log('AccessToken: ', accessToken)
+
+  const { access_token, openid } = accessToken
+
+  let user
+
+  try {
     user = await fetchUser(access_token, openid)
   } catch (err) {
-    return [err]
+    error = err
   }
+
+  console.log('User: ', user)
+
+  if (error) {
+    return [error]
+  }
+
   return [null, user]
 }
 
