@@ -13,7 +13,7 @@ async function fetchToken(code) {
     const { data = null } = await U.axios.get(url)
     token = data
   } catch (err) {
-    token = null
+    throw err
   }
   return token
 }
@@ -28,7 +28,7 @@ async function fetchUser(accessToken, openId) {
     const { data = null } = await U.axios.get(url)
     user= data
   } catch (err) {
-    user = null
+    throw err
   }
   return user
 }
@@ -49,8 +49,6 @@ async function user(code) {
     return [error]
   }
 
-  console.log('AccessToken: ', accessToken)
-
   const { access_token, openid } = accessToken
 
   let user
@@ -60,8 +58,6 @@ async function user(code) {
   } catch (err) {
     error = err
   }
-
-  console.log('User: ', user)
 
   if (error) {
     return [error]
