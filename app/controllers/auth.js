@@ -1,11 +1,11 @@
-const configs = require('../configs')
+const config = require('../config')
 const U = require('../utils')
 
 /**
  * 获取access token
  */
 async function fetchToken(code) {
-  const { oauth } = configs
+  const { oauth } = config
   const { appid, secret } = oauth
   const url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${secret}&code=${code}&grant_type=authorization_code`
   let token
